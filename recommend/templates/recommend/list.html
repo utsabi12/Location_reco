@@ -39,9 +39,9 @@
 		<div class="card" >
 			<img class="card-img-top" src="{{ location.location_logo.url}}" alt="img-fluid img-thumbnail" style="height: 250px;width: 400px;">
 			<div class="card-body">
-                <h5 class="card-text">{{location.title}}</h5>
+                <p class="card-text" style="color: black;font-size: large;">{{location.title}}</p>
 
-                <p class="card-text truncate">{{loc.description}}</p>
+                <p class="card-text truncate"  style="color: black;">{{location.description |truncatechars:50 }}</p>
                 <a href="{% url 'detail' location.id %}" class="btn btn-success" style="font-size:medium; color:#fff;background-color:#4CAF50;padding:10px;text-align: center;margin-left: 80px;width: 200px;">Detail</a>
 
 			</div>
