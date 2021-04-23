@@ -1,0 +1,39 @@
+{% extends 'recommend/base.html'%}
+{% block title %}Recommendations{% endblock %}
+{% block body %}
+
+<div class="container-fluid">
+	<h2>Recommendations for you</h2>
+</div>
+<hr>
+<br>
+
+	<div class="container-fluid">
+        <div class="row">
+            <div class="card" style="border:1px solid green;background-color:white;margin-bottom: 5px;height: 500px;margin-bottom: 20px;">{{ my_map|safe }}</div>
+        </div>
+        <br>
+        <div class="row">
+            <h1 style="color: white;">Your Recommendations</h1>
+        </div><br>
+        <div class="row">
+            {% if location_list %}
+            {% for location in location_list %}
+            <div class=" col-md-4 mt-4"  style="border:1px solid green;background-color:white;margin-bottom: 5px;margin-top: 20px;">
+                <div class="card" >
+                    <img class="card-img-top" src="{{ location.location_logo.url}}" alt="img-fluid img-thumbnail" style="height: 250px;width: 400px;">
+                    <div class="card-body">
+                        
+                        <p class="card-text" style="color: black;font-size: medium;"> {{location.title}}</p>
+                        <p class="card-text truncate" style="color: black;font-size: medium;">{{location.description |truncatechars:50 }}</p>
+                        
+                        <a href="{% url 'detail' location.id %}" class="btn btn-success" style="font-size:medium; color:#fff;background-color:#4CAF50;padding:10px;text-align: center;margin-left: 80px;width: 200px;">Detail</a>
+        
+                    </div>
+                </div>
+            </div>
+           {% endfor %}
+           {% endif %}
+        </div>
+
+{% endblock %}

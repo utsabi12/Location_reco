@@ -1,0 +1,55 @@
+{% extends 'recommend/base.html'%}
+{% block body %}
+
+{% if not request.user.is_authenticated %}
+    <br>
+{% else %}
+    <center style="color:#fff"><h2>Welcome {{user.username}}!!</h2></center>
+{% endif %}
+
+<div class="container" >
+    <div class="col-xs-6 col-xs-offset-3 ">
+    	<form class="form-horizontal" role="search" method="get" action=''>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control input-lg " name="q" value="{{ request.GET.q }}" placeholder= "Search Location "/>
+                    <span class='input-group-btn'>
+                        <button class='button1' type='submit'>Search</button>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+ </div>
+
+
+<p style="text-align:left;">
+    <span style="float:right;">
+        <a href="{% url 'recommend' %}" class="btn"><button style="font-size:medium; color:#fff;background-color:#4CAF50;padding:10px;padding: 10px;">Get Location Recommendation</button></a>
+    <h2>Locations List</h2>
+    </span>
+</p>
+<hr>
+<br>
+
+<div class="row">
+	{% if locations %}
+    {% for location in locations %}
+	<div class=" col-md-4 mr-4" style="border:1px solid green;background-color:white;margin-bottom: 5px;">
+		<div class="card" >
+			<img class="card-img-top" src="{{ location.location_logo.url}}" alt="img-fluid img-thumbnail" style="height: 250px;width: 400px;">
+			<div class="card-body">
+                <h5 class="card-text">{{location.title}}</h5>
+
+                <p class="card-text truncate">{{loc.description}}</p>
+                <a href="{% url 'detail' location.id %}" class="btn btn-success" style="font-size:medium; color:#fff;background-color:#4CAF50;padding:10px;text-align: center;margin-left: 80px;width: 200px;">Detail</a>
+
+			</div>
+		</div>
+	</div>
+   {% endfor %}
+   {% endif %}
+</div>
+
+
+{% endblock %}
