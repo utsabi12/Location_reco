@@ -43,6 +43,7 @@
 
                 <p class="card-text truncate"  style="color: black;">{{location.description |truncatechars:50 }}</p>
                 <a href="{% url 'detail' location.id %}" class="btn btn-success" style="font-size:medium; color:#fff;background-color:#4CAF50;padding:10px;text-align: center;margin-left: 80px;width: 200px;">Detail</a>
+                <a href="{% url 'addToWishlist' location.id %}" class="btn btn-success" style="font-size:medium; color:#fff;background-color:#4CAF50;padding:10px;text-align: center;margin-left: 80px;width: 200px;">Add to wish List</a>
 
 			</div>
 		</div>

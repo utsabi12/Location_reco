@@ -36,42 +36,16 @@ def detail(request, location_id):
         raise Http404
     locations = get_object_or_404(Location, id=location_id)
     location = Location.objects.get(id=location_id)
-    
     temp = list(MyList.objects.all().values().filter(location_id=location_id,user=request.user))
-    if temp:
-        update = temp[0]['visit']
-    else:
-        update = False
     if request.method == "POST":
-
-        # For my list
-        if 'visit' in request.POST:
-            visit_flag = request.POST['visit']
-            if visit_flag == 'on':
-                update = True
-            else:
-                update = False
-            if MyList.objects.all().values().filter(location_id=location_id,user=request.user):
-                MyList.objects.all().values().filter(location_id=location_id,user=request.user).update(Visited=update)
-            else:
-                q=MyList(user=request.user,location=location,visit=update)
-                q.save()
-            if update:
-                messages.success(request, "Location added to your list!")
-            else:
-                messages.success(request, "Location removed from your list!")
-
-            
-        # For rating
+        rate = request.POST['rating']
+        if Myrating.objects.all().values().filter(location_id=location_id,user=request.user):
+            Myrating.objects.all().values().filter(location_id=location_id,user=request.user).update(rating=rate)
         else:
-            rate = request.POST['rating']
-            if Myrating.objects.all().values().filter(location_id=location_id,user=request.user):
-                Myrating.objects.all().values().filter(location_id=location_id,user=request.user).update(rating=rate)
-            else:
-                q=Myrating(user=request.user,location=location,rating=rate)
-                q.save()
+            q=Myrating(user=request.user,location=location,rating=rate)
+            q.save()
 
-            messages.success(request, "Rating has been submitted!")
+        messages.success(request, "Rating has been submitted!")
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     out = list(Myrating.objects.filter(user=request.user.id).values())
@@ -85,12 +59,11 @@ def detail(request, location_id):
             rate_flag = True
             break
 
-    context = {'locations': locations,'location_rating':location_rating,'rate_flag':rate_flag,'update':update}
+    context = {'locations': locations,'location_rating':location_rating,'rate_flag':rate_flag}
     return render(request, 'recommend/detail.html', context)
 
-
 # MyList functionality
-def watch(request):
+def mylist(request):
 
     if not request.user.is_authenticated:
         return redirect("login")
@@ -98,7 +71,7 @@ def watch(request):
         raise Http404
 
     locations = Location.objects.filter(mylist__user=request.user)
-    # query = request.GET.get('q')
+    query = request.GET.get('q')
     print(query)
 
     if query:
@@ -249,3 +222,22 @@ def Login(request):
 def Logout(request):
     logout(request)
     return redirect("login")
+
+
+def addToWishlist(request, location_id):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    if not request.user.is_active:
+        raise Http404
+    location = Location.objects.get(id=location_id)
+    q=MyList(user=request.user,location=location,Visited=True)
+    q.save()
+    locations = Location.objects.all()
+    query = request.GET.get('q')
+
+    if query:
+        locations = Location.objects.filter(Q(title__icontains=query)).distinct()
+        return render(request, 'recommend/list.html', {'locations': locations})
+    messages.success(request, "Location added to your list!")
+
+    return render(request, 'recommend/list.html', {'locations': locations})
