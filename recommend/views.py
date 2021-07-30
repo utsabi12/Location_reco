@@ -28,6 +28,11 @@ def index(request):
     return render(request, 'recommend/list.html', {'locations': locations})
 
 
+def reviews(request):
+    context ={}
+    return render(request, 'recommend/review.html', context)
+
+
 # Show details of the Location
 def detail(request, location_id):
     if not request.user.is_authenticated:

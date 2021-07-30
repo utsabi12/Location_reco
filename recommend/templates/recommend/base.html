@@ -132,6 +132,7 @@
 	</script>
     <script type="text/javascript">
     var $star_rating = $('.star-rating .fa');
+    var $star_rating2 = $('.star-rating2 .fa');
 
     var SetRatingStar = function() {
         return $star_rating.each(function() {
@@ -142,13 +143,28 @@
         }
         });
         };
+    var SetRatingStar2 = function() {
+    return $star_rating.each(function() {
+    if (parseInt($star_rating.siblings('input.rating-value2').val()) >= parseInt($(this).data('rating2'))) {
+        return $(this).removeClass('fa-star-o').addClass('fa-star');
+    } else {
+    return $(this).removeClass('fa-star').addClass('fa-star-o');
+    }
+    });
+    };
 
     $star_rating.on('click', function() {
     $star_rating.siblings('input.rating-value').val($(this).data('rating'));
     return SetRatingStar();
     });
+    
+    $star_rating2.on('click', function() {
+    $star_rating2.siblings('input.rating-value2').val($(this).data('rating2'));
+    return SetRatingStar2();
+    });
 
     SetRatingStar();
+    SetRatingStar2();
     $(document).ready(function() {
 
     });
